@@ -10,28 +10,11 @@ import {
 
 import { useNavigate } from "react-router-dom";
 
-import { useGetProductsQuery } from "../api/productsApi";
-
-const categories = [
-  "electronics",
-  "jewelery",
-  "men's clothing",
-  "women's clothing",
-];
-
-const formatCategory = (category) =>
-  category
-    .split(" ")
-    .map(
-      (word) =>
-        word.charAt(0).toUpperCase() + word.slice(1)
-    )
-    .join(" ");
+import { useGetCategoriesQuery } from "../api/productsApi";
 
 const CategoriesPage = () => {
   const navigate = useNavigate();
-  const { data = [] } =
-    useGetProductsQuery();
+  const { data = [] } = useGetCategoriesQuery();
 
   return (
     <Container sx={{ mt: 3, pb: 4 }}>
@@ -57,9 +40,9 @@ const CategoriesPage = () => {
           gap: 3,
         }}
       >
-        {categories.map((category) => (
+        {data.map((category) => (
           <Card
-            key={category}
+            key={category.slug}
             sx={{
               bgcolor: "background.paper",
               boxShadow:
@@ -70,20 +53,15 @@ const CategoriesPage = () => {
               onClick={() =>
                 navigate(
                   `/categories/${encodeURIComponent(
-                    category
+                    category.slug
                   )}`
                 )
               }
             >
               <CardMedia
                 component="img"
-                image={
-                  data.find(
-                    (product) =>
-                      product.category === category
-                  )?.image
-                }
-                alt={formatCategory(category)}
+                image={category.image}
+                alt={category.name}
                 sx={{
                   height: 180,
                   objectFit: "contain",
@@ -102,7 +80,7 @@ const CategoriesPage = () => {
                     fontWeight: 700,
                   }}
                 >
-                  {formatCategory(category)}
+                  {category.name}
                 </Typography>
               </CardContent>
             </CardActionArea>

@@ -4,7 +4,7 @@ export const productsApi = createApi({
   reducerPath: "productsApi",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://fakestoreapi.com/",
+    baseUrl: "/api/",
   }),
 
   endpoints: (builder) => ({
@@ -12,14 +12,25 @@ export const productsApi = createApi({
       query: () => "products",
     }),
 
+    getCategories: builder.query({
+      query: () => "categories",
+    }),
+
+    getCategory: builder.query({
+      query: (categorySlug) =>
+        `categories/${encodeURIComponent(categorySlug)}`,
+    }),
+
     getProductsByCategory: builder.query({
-      query: (category) =>
-        `products/category/${encodeURIComponent(category)}`,
+      query: (categorySlug) =>
+        `products/category/${encodeURIComponent(categorySlug)}`,
     }),
   }),
 });
 
 export const {
   useGetProductsQuery,
+  useGetCategoriesQuery,
+  useGetCategoryQuery,
   useGetProductsByCategoryQuery,
 } = productsApi;

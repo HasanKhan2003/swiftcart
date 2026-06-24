@@ -10,24 +10,20 @@ import { useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import ProductModal from "../components/ProductModal";
 
-import { useGetProductsByCategoryQuery } from "../api/productsApi";
-
-const formatCategory = (category) =>
-  category
-    .split(" ")
-    .map(
-      (word) =>
-        word.charAt(0).toUpperCase() + word.slice(1)
-    )
-    .join(" ");
+import {
+  useGetCategoryQuery,
+  useGetProductsByCategoryQuery,
+} from "../api/productsApi";
 
 const CategoryProductsPage = () => {
-  const { category } = useParams();
+  const { categorySlug } = useParams();
   const [selectedProduct, setSelectedProduct] =
     useState(null);
 
+  const { data: category } =
+    useGetCategoryQuery(categorySlug);
   const { data = [] } =
-    useGetProductsByCategoryQuery(category);
+    useGetProductsByCategoryQuery(categorySlug);
 
   return (
     <Container sx={{ mt: 3, pb: 4 }}>
@@ -39,8 +35,8 @@ const CategoryProductsPage = () => {
           mb: 2,
         }}
       >
-        {formatCategory(category)}
-      </Typography>
+          {category?.name || categorySlug}
+        </Typography>
 
       <Box
         sx={{

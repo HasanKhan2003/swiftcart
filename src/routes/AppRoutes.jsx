@@ -27,7 +27,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/categories/:category"
+        path="/categories/:categorySlug"
         element={<CategoryProductsPage />}
       />
     </Routes>
